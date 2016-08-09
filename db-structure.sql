@@ -1087,6 +1087,82 @@ CREATE TABLE IF NOT EXISTS `replay_vault` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `review_content`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `review_content` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `text` text NOT NULL COMMENT 'Content of the Review',
+  `rating` enum('1','2','3','4','5') NOT NULL COMMENT 'Rating in Stars',
+  `user_id` mediumint(8) unsigned NOT NULL COMMENT 'Author of the Rating',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `review_content_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `login` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `review_map`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `review_map` (
+  `id` mediumint(8) unsigned NOT NULL,
+  `map_id` mediumint(8) unsigned NOT NULL COMMENT 'Id of the Map',
+  `map_version_id` mediumint(8) unsigned NOT NULL COMMENT 'Id of the map version',
+  `review_id` mediumint(8) unsigned NOT NULL COMMENT 'Id of the Review',
+  PRIMARY KEY (`id`),
+  KEY `review_id` (`review_id`),
+  KEY `map_id` (`map_id`),
+  KEY `map_version_id` (`map_version_id`),
+  CONSTRAINT `review_map_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `review_content` (`id`),
+  CONSTRAINT `review_map_ibfk_2` FOREIGN KEY (`map_id`) REFERENCES `map` (`id`),
+  CONSTRAINT `review_map_ibfk_3` FOREIGN KEY (`map_version_id`) REFERENCES `map_version` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `review_mod`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `review_mod` (
+  `id` mediumint(8) unsigned NOT NULL,
+  `mod_id` mediumint(8) unsigned NOT NULL COMMENT 'Name of the target, a github repository name',
+  `review_id` mediumint(8) unsigned NOT NULL COMMENT 'Id of the Review',
+  PRIMARY KEY (`id`),
+  KEY `review_id` (`review_id`),
+  KEY `mod_id` (`mod_id`),
+  CONSTRAINT `review_mod_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `review_content` (`id`),
+  CONSTRAINT `review_mod_ibfk_2` FOREIGN KEY (`mod_id`) REFERENCES `table_mod` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `review_replay`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `review_replay` (
+  `id` mediumint(8) unsigned NOT NULL,
+  `replay_id` bigint(20) unsigned NOT NULL COMMENT 'UID of Game Replays',
+  `review_id` mediumint(8) unsigned NOT NULL COMMENT 'Name of the target, a github repository name',
+  PRIMARY KEY (`id`),
+  KEY `review_id` (`review_id`),
+  KEY `replay_id` (`replay_id`),
+  CONSTRAINT `review_replay_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `review_content` (`id`),
+  CONSTRAINT `review_replay_ibfk_2` FOREIGN KEY (`replay_id`) REFERENCES `game_replays` (`UID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `smurf_table`
 --
 
