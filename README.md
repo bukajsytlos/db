@@ -37,3 +37,10 @@ To get a shell mysql session where you can execute queries conveniently, use thi
 
     docker exec -ti faf-db mysql -u <username> -p
 
+# How to write a Migration
+
+1. Create a migration sql file in the form <description>-<hash-of-based-git-commit>.sql
+2. Adapt db-structure.sql (or use create-db-structure.sh)
+3. Create a Pull Request
+
+**Optional:** Create a Schema in [faftools](https://github.com/FAForever/faftools/tree/develop/faf/api).
