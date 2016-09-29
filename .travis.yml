@@ -9,4 +9,6 @@ services:
   - docker
 
 script:
-  - ./setup_db.sh
+  - sudo apt-get update
+  - sudo apt-get -y install liblua5.1-dev libffi-dev
+  - bash setup_db.sh
