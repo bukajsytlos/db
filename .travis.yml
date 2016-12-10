@@ -8,5 +8,11 @@ python: "3.5"
 services:
   - docker
 
+before_install:
+  # Disable services enabled by default (?)
+  # https://github.com/travis-ci/travis-ci/issues/7008
+  # http://docs.travis-ci.com/user/database-setup/#MySQL
+  - sudo /etc/init.d/mysql stop
+
 script:
   - ./setup_db.sh -d
